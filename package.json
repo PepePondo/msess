@@ -12,9 +12,14 @@
 	},
 	"dependencies": {
 		"@astrojs/cloudflare": "^12.6.6",
-		"astro": "^5.13.4"
+		"@tailwindcss/vite": "^4.1.12",
+		"astro": "^5.13.4",
+		"daisyui": "^5.0.54",
+		"pdfjs-dist": "^5.4.149",
+		"tailwindcss": "^4.1.12"
 	},
 	"devDependencies": {
+		"@tailwindcss/typography": "^0.5.16",
 		"@types/node": "^24.3.0",
 		"wrangler": "^4.33.1"
 	}
