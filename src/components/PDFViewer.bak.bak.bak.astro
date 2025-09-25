@@ -1,0 +1,217 @@
+---
+export interface Props {
+  src: string;
+  title?: string;
+  height?: string;
+  showToolbar?: boolean;
+  className?: string;
+}
+
+const {
+  src,
+  title = "PDF Document",
+  height = "600px",
+  showToolbar = true,
+  className = "",
+} = Astro.props;
+
+// PDF.js example
+const PDF_PATH = src;
+const WORKER_PATH = "//unpkg.com/pdfjs-dist@4.0.269/build/pdf.worker.min.mjs";
+---
+
+<h1>{title}</h1>
+<pdf-viewer
+  data-pdf-path={PDF_PATH}
+  data-worker-path={WORKER_PATH}
+  class={className}
+>
+</pdf-viewer>
+
+<div class="pdf-container">
+  <div class="controls flex justify-between mb-4">
+    <button data-pdf-prev class="btn btn-primary">Previous</button>
+    <span data-pdf-page class="page-counter"
+      >Page <span></span>/<span></span></span
+    >
+    <button data-pdf-next class="btn btn-primary">Next</button>
+  </div>
+
+  <script
+    is:inline
+    src="https://unpkg.com/pdfjs-dist@4.0.269/build/pdf.min.mjs"
+    type="module"></script>
+
+  <script>
+    import type { PDFDocumentLoadingTask } from "pdfjs-dist";
+    import { transpileModule } from "typescript";
+
+    // Unique id
+    const uniqueId = crypto.randomUUID;
+
+    const viewerId = `pdf-canvas-${uniqueId}`;
+    const pageCount = `page-count-${uniqueId}`;
+    const pageNum = `page-num-${uniqueId}`;
+
+    declare global {
+      interface Window {
+        pdfjsLib?: any;
+      }
+    }
+
+    class PDFViewer extends HTMLElement {
+      pdfPath;
+      workerPath;
+      loadingTask: PDFDocumentLoadingTask | null = null;
+      pdfDocument = null;
+      canvas;
+
+      // Control elements - check the "findControls()" function for more info
+      controls = {
+        prevBtn: null,
+        nextBtn: null,
+        pageSpan: null,
+        loadingSpan: null,
+      };
+
+      // Navigation elements
+      prevButton;
+      nextButton;
+      pageCountSpan;
+      pageNumSpan;
+      loadingPlaceHolder;
+
+      // State handlers
+      currentPage = 1;
+      totalPages = 0;
+      isRendering = false;
+
+      constructor() {
+        super();
+        this.attachShadow({ mode: "open" });
+
+        // Get attributes of the pdf and PDF.js worker path passed through data-attributes
+        this.pdfPath = this.getAttribute("data-pdf-path");
+        this.workerPath = this.getAttribute("data-worker-path");
+
+        // Create canvas
+        this.canvas = document.createElement("canvas");
+        this.canvas.setAttribute("id", viewerId);
+        this.canvas.style.direction = "ltr";
+
+        // Create page count update and navigation buttons
+        this.pageCountSpan = document.createElement("span");
+        this.pageCountSpan.setAttribute("id", pageCount);
+
+        this.pageNumSpan = document.createElement("span");
+        this.pageNumSpan.setAttribute("id", pageNum);
+
+        this.prevButton = document.createElement("button");
+        this.prevButton.textContent = "Prev";
+        this.prevButton.disabled = true;
+
+        this.nextButton = document.querySelector("next-button");
+        this.nextButton.textContent = "Next";
+        this.nextButton.disabled = true;
+
+        this.loadingPlaceHolder = document.createElement("span");
+        this.loadingPlaceHolder.textContent = "Loading...";
+        this.loadingPlaceHolder.style.margin = "0 15px";
+
+        this.shadowRoot?.append(
+          this.pageCountSpan,
+          this.pageNumSpan,
+          this.canvas
+        );
+      }
+
+      // So... Checked in with Claude - we need to resort to finding the elements in relation to the current component because we can't share the generated UUID outside the script scope
+      findControls() {
+        if (!this.controls.prevBtn) {
+          this.controls.prevBtn =
+            this.parentElement?.querySelector("[data-pdf-prev]");
+        }
+        if (!this.controls.nextBtn) {
+          this.controls.nextBtn =
+            this.parentElement?.querySelector("[data-pdf-next]");
+        }
+        if (!this.controls.pageSpan) {
+          this.controls.pageSpan =
+            this.parentElement?.querySelector("[data-pdf-page]");
+        }
+      }
+
+      bindEvents() {
+        Object.entries(this.controls).forEach(([key, element]) => {
+          if (!element) return;
+
+          switch (key) {
+            case "prevBtn":
+              element.addEventListener("click", () =>
+                this.goToPage(this.currentPage - 1)
+              );
+              element.disabled = true;
+              break;
+          }
+        });
+      }
+
+      async load() {
+        if (!this.loadingTask) return;
+
+        const pdfDocument = await this.loadingTask.promise;
+        // Request a first page
+        const pdfPage = await pdfDocument.getPage(1);
+
+        // Total Pages
+        const numPages = pdfDocument.numPages;
+        console.log(`Number of Pages: ${numPages}`);
+
+        // Display page on the existing canvas with 100% scale.
+        const viewport = pdfPage.getViewport({ scale: 1.0 });
+        const ctx = this.canvas.getContext("2d");
+
+        if (!this.canvas || !ctx) {
+          return;
+        }
+
+        this.canvas.width = viewport.width;
+        this.canvas.height = viewport.height;
+
+        // Render PDF page into canvas context
+        const renderTask = pdfPage.render({
+          canvasContext: ctx,
+          viewport: viewport,
+        });
+        await renderTask.promise;
+
+        // Get Page and Count unique ID instance and render
+        //   document.getElementById(pageNum)?.textContent =
+      }
+
+      handleLoaded() {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc = this.workerPath;
+        this.loadingTask = window.pdfjsLib.getDocument(this.pdfPath);
+        this.load();
+      }
+
+      connectedCallback() {
+        if (!this.pdfPath || !this.workerPath) return;
+
+        window.addEventListener(
+          "DOMContentLoaded",
+          this.handleLoaded.bind(this)
+        );
+      }
+
+      disconnectedCallback() {
+        window.removeEventListener(
+          "DOMContentLoaded",
+          this.handleLoaded.bind(this)
+        );
+      }
+    }
+
+    customElements.define("pdf-viewer", PDFViewer);
+  </script>
+</div>

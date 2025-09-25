@@ -8,7 +8,11 @@ import tailwindcss from "@tailwindcss/vite";
 export default defineConfig({
   vite: {
     plugins: [tailwindcss()],
+    optimizeDeps: {
+      include: ["pdfjs-dist"],
+    },
   },
+
   adapter: cloudflare({
     platformProxy: {
       enabled: true,
