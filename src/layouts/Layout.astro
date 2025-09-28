@@ -12,21 +12,21 @@ import Opening from "../components/Opening.astro";
 
 <!doctype html>
 <html lang="en" data-theme="corporate">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta
-      name="description"
-      content="The Malaysian Society of Endoscopic Spine Surgery - specialists in interventional pain and spinal procedures"
-    />
-    <meta name="generator" content={Astro.generator} />
-    <title>Malaysia Society of Endoscopic Spine Surgery</title>
-  </head>
-  <body class="grid grid-cols-12 font-main">
-    <Navbar />
-    <Hero />
-    <Opening />
-    <slot />
-  </body>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta
+			name="description"
+			content="The Malaysian Society of Endoscopic Spine Surgery - specialists in interventional pain and spinal procedures"
+		/>
+		<meta name="generator" content={Astro.generator} />
+		<title>Malaysia Society of Endoscopic Spine Surgery</title>
+	</head>
+	<body class="grid grid-cols-12 font-main">
+		<Navbar />
+		<Hero />
+		<Opening />
+		<slot />
+	</body>
 </html>
