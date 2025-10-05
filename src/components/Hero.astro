@@ -2,15 +2,15 @@
 import { Mail } from '@lucide/astro';
 ---
 
-<div class="col-start-3 flex flex-row col-span-8 content-center justify-between">
+<div class="col-start-3 flex flex-row grid-cols-subgrid content-center justify-between col-span-8 z-10">
   <div class="max-w-md content-center">
     <p class="text-primary font-semibold mb-2 tracking-wider uppercase">MSESS</p>
     <h1 class="text-4xl font-bold mb-5 tracking-wide leading-tight max-w-prose">Malaysia Society<br> of Endoscopic<br>Spine Surgery</h1>
     <p class="leading-normal max-w-prose mb-4 tracking-wider">At MSESS, we believe that understanding pain is the best way to help others.</p>
-    <button class="btn btn-md text-[1.01rem] py-6 px-6 mr-4 btn-primary tracking-wider"
-        >Join us at MSESS 2026</button
+    <button class="btn btn-md text-[1.01rem] py-6 px-6 mr-4 btn-primary tracking-wider drop-shadow-md hover:bg-white group"
+        ><span class="group-hover:text-black delay-50 transition-discrete">Join us at MSESS 2026</span></button
       >
-      <button class="btn btn-outline bg-white px-8 py-6 group hover:bg-black hover:btn-neutral"><Mail size={28} stroke-width={1.5} class="group-hover:stroke-white group-hover:stroke-2.5 delay-100 transition-discrete"></Mail></button>
+      <button class="btn btn-outline bg-white px-8 py-6 group hover:bg-black hover:btn-neutral drop-shadow-md"><Mail size={28} stroke-width={1.5} class="group-hover:stroke-white group-hover:stroke-2.5 delay-50 transition-discrete"></Mail></button>
   </div>
-  <div><img src="/images/vert-kl-city.jpg" alt="KLCC Towers" class="rounded-3xl w-132 h-132"></div>
+  <div class="bg-[url('/images/vert-kl-city.jpg')] rounded-3xl w-132 aspect-square mask-clip-view"> <!-- <img src="/images/vert-kl-city.jpg" alt="KLCC Towers" class="rounded-3xl w-132 aspect-square mask-clip-view">--></div> 
 </div>

@@ -23,19 +23,21 @@ import Opening from "../components/Opening.astro";
 		<meta name="generator" content={Astro.generator} />
 		<title>Malaysia Society of Endoscopic Spine Surgery</title>
 	</head>
-	<body class="grid grid-cols-12 font-main gap-20">
+	<body class="grid grid-cols-12 font-main gap-24">
 		<Navbar />
 		<Hero />
+		<div class="bg-clip-box absolute z-0 -top-10 -right-0 h-256 overflow-hidden bg-linear-to-l from-cyan-200 to-[#0088ff] bg-local"></div>
 		<Opening />
 		<slot />
 	</body>
 </html>
 
-<!-- <style>
-body {
-	background-color: grey;
-	background-position: top right;
-	background-attachment: fixed;
-	background-size: 50px 50px;
-}
-</style> -->
+<style>
+	.bg-clip-box {
+		width: 50%;
+		/* height: 760px;  */
+		clip-path: inset(5% 0% 13% 5% round 5% 5% 0% 5%);
+		/* box-sizing: border-box; */
+		/* background-attachment: fixed; */
+	}
+</style>
