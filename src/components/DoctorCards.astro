@@ -1,0 +1,19 @@
+---
+export interface Props {
+	src: string;
+	title: string;
+	desc?: string;
+}
+
+const {
+	src,
+	title = "Dr. Placeholder",
+	desc = "Lorem Ipsum Sit Dolor Amet",
+} = Astro.props;
+---
+
+<div class="avatar">
+	<div class="w-24 rounded-full">
+		<img {src} />
+	</div>
+</div>

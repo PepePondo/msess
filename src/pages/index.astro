@@ -1,5 +1,10 @@
 ---
 import Layout from "../layouts/Layout.astro";
+
+// Components
+import Hero from "../components/Hero.astro";
+import Opening from "../components/Opening.astro";
+import Doctors from "../components/Doctors.astro";
 import PDFViewer from "../components/PDFViewer.astro";
 
 // Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
@@ -7,9 +12,7 @@ import PDFViewer from "../components/PDFViewer.astro";
 ---
 
 <Layout>
-  <!-- <PDFViewer
-    src="pdf/msipp.pdf"
-    title="Annual Scientific Meeting 2025"
-    scale="1"
-  /> -->
+	<Hero />
+	<Opening />
+	<Doctors />
 </Layout>

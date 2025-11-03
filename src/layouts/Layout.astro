@@ -25,9 +25,9 @@ import Opening from "../components/Opening.astro";
 	</head>
 	<body class="grid grid-cols-12 font-main gap-24">
 		<Navbar />
-		<Hero />
-		<div class="bg-clip-box absolute z-0 -top-10 -right-0 h-256 overflow-hidden bg-linear-to-l from-cyan-200 to-[#0088ff] bg-local"></div>
-		<Opening />
+		<div
+			class="bg-clip-box absolute z-0 -top-10 -right-0 h-256 overflow-hidden bg-linear-to-l from-cyan-200 to-[#0088ff] bg-local">
+		</div>
 		<slot />
 	</body>
 </html>
